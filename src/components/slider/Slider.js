@@ -1,50 +1,109 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Slider.css'
-import ImgComponent from '../imgComponents/ImgComponent'
-import image1 from '../../assets/image_1.jpg'
-import image2 from '../../assets/image_2.jpg'
-import image3 from '../../assets/image_3.jpg'
-import image4 from '../../assets/image_4.jpg'
-import image5 from '../../assets/image_5.jpg'
 
-const Slider = () => {
-    const sliderArr = [
-        <ImgComponent src={image1} />,
-        <ImgComponent src={image2} />,
-        <ImgComponent src={image3} />,
-        <ImgComponent src={image4} />,
-        <ImgComponent src={image5} />]
 
-    const [x, setX] = useState(0)
+const Slider = ({ startFrom, children, automatic = false, time = 5000 }) => {
+    const [currentSlide, setCurrentSlide] = useState(startFrom || 0)
 
-    const goLeft = () => {
-        x === 0 ? setX(- 100 * (sliderArr.length - 1)) : setX(x + 100)
+    const [touchStart, setTouchStart] = useState(0)
+    const [touchEnd, setTouchEnd] = useState(0);
+
+    const [auto, setAuto] = useState(automatic)
+
+    const timerRef = useRef(null)
+
+    useEffect(() => {
+        if (timerRef.current) {
+            clearTimeout(timerRef.current);
+        }
+        timerRef.current = setTimeout(() => {
+            if (auto) {
+                setCurrentSlide(currentSlide === (children.length - 1) ? 0 : currentSlide + 1);
+            }
+        }, time);
+        return () => clearTimeout(timerRef.current);
+    }, [auto, currentSlide]);
+
+
+    const next = () => {
+        setCurrentSlide(currentSlide === (children.length - 1) ? 0 : currentSlide + 1)
     }
-    const goRight = () => {
-        x === - 100 * (sliderArr.length - 1) ? setX(0) : setX(x - 100)
+
+    const prev = () => {
+        setCurrentSlide(currentSlide === 0 ? (children.length - 1) : currentSlide - 1)
     }
+
+    const updateNavElements = index => {
+        setCurrentSlide(index)
+    }
+
+    const coordinatesActiveSlide = currentSlide * (-100)
+
+    const handleTouchStart = clientX => {
+        setTouchStart(clientX);
+    }
+
+    const handleTouchMove = clientX => {
+        setTouchEnd(clientX);
+    }
+
+    const handleTouchEnd = () => {
+
+        if (touchStart - touchEnd > 150) {
+            next();
+        }
+
+        if (touchStart - touchEnd < -150) {
+            prev();
+        }
+        return
+    }
+    // setTimeout(() => next(), 2000)
 
     return (
-        <div className='slider'>
+        <div className='slider'
+            onMouseDown={e => handleTouchStart(e.clientX)}
+            onMouseMove={e => handleTouchMove(e.clientX)}
+            onMouseUp={() => handleTouchEnd()}
+
+            onTouchStart={e => handleTouchStart(e.targetTouches[0].clientX)}
+            onTouchMove={e => handleTouchMove(e.targetTouches[0].clientX)}
+            onTouchEnd={() => handleTouchEnd()}
+        >
             {
-                sliderArr.map((item, index) => {
+                children.map((item, index) => {
                     return (
                         <div
-                            className="slide"
+                            className='slide'
                             key={index}
-                            style={{ transform: `translateX(${x}%)` }}
+                            style={{ transform: `translateX(${coordinatesActiveSlide}%)` }}
                         >
                             {item}
                         </div>
                     )
                 })
             }
-            <button id="goLeft" onClick={goLeft}>&#60;</button>
-            <button id="goRight" onClick={goRight}>&#62;</button>
-        </div>
-    )
 
+            <button id='goLeft' onClick={prev}><span className="symbol">&#60;</span></button>
+            <button id='goRight' onClick={next}><span className="symbol">&#62;</span></button>
+
+            <div className="slider-wrapper__nav" >
+                {
+                    children.map((s, i) => {
+                        return <span
+                            key={i}
+                            className={currentSlide === i ? 'active' : ''}
+                            onClick={() => updateNavElements(i)}>
+                        </span>
+                    }
+                    )
+                }
+            </div>
+        </div >
+    )
 }
 
 export default Slider
+
+
 
