@@ -1,6 +1,7 @@
 .slider {
     position: relative;
     width: 100%;
+    min-width: 300px;
     height: 100vh;
     box-sizing: border-box;
     margin: 0;
@@ -106,7 +107,16 @@
     }
 }
 @media screen and (max-width: 500px)   {
+    .slider-wrapper__nav span{
+        width: 10px;
+        height: 10px;
+}}
+@media screen and (max-width: 320px)   {
     .slider-wrapper__nav  {
-        display: none;
+        left: 30%;
+        
     }
+    .slider-wrapper__nav span{
+        margin: 0 5px;
+}
 }

@@ -37,7 +37,7 @@ const Slider = ({ startFrom, children, automatic = false, time = 5000 }) => {
         setCurrentSlide(index)
     }
 
-    const coordinatesActiveSlide = currentSlide * (-100)
+    let coordinatesActiveSlide = currentSlide * (-100)
 
     const handleTouchStart = clientX => {
         setTouchStart(clientX);
@@ -58,7 +58,6 @@ const Slider = ({ startFrom, children, automatic = false, time = 5000 }) => {
         }
         return
     }
-    // setTimeout(() => next(), 2000)
 
     return (
         <div className='slider'
