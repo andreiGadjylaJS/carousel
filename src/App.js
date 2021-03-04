@@ -27,6 +27,7 @@ const slides = [
     }
 ]
 
+
 const App = () => {
     return <Slider startFrom={1} automatic={false} time={3000}>
         {
