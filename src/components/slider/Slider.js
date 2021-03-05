@@ -70,18 +70,14 @@ const Slider = ({ startFrom = 0, children, automatic = false, time = 5000 }) => 
             onMouseUp={e => handleTouchEnd(e.clientX)}
 
             onTouchStart={e => handleTouchStart(e.changedTouches[0].clientX)}
-
             onTouchMove={e => {
                 const mob = true
                 handleTouchMove(e.changedTouches[0].clientX, mob)
             }}
-
             onTouchEnd={e => handleTouchEnd(e.changedTouches[0].clientX)}
-
         >
             {
                 children.map(item => (
-
                     <div
                         className={`slide ${isMove ? 'moving' : ''} `}
                         key={item.key}
@@ -92,25 +88,22 @@ const Slider = ({ startFrom = 0, children, automatic = false, time = 5000 }) => 
                 )
                 )
             }
-
             <button id='goLeft' onClick={prev}><span className="symbol">&#60;</span></button>
             <button id='goRight' onClick={next}><span className="symbol">&#62;</span></button>
 
             <div className="slider-wrapper__nav" >
                 {
-                    children.map((s, i) => {
-                        return <span
-                            key={s.key}
-                            className={currentSlide === i ? 'active' : ''}
-                            onClick={() => updateNavElements(i)}>
-                        </span>
-                    }
+                    children.map((s, i) => (<span
+                        key={s.key}
+                        className={currentSlide === i ? 'active' : ''}
+                        onClick={() => updateNavElements(i)}>
+                    </span>
+                    )
                     )
                 }
             </div>
         </div >
     )
-
 }
 
 export default Slider
