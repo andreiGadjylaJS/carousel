@@ -8,8 +8,8 @@ const Slider = ({ startFrom = 0, children, automatic = false, time = 5000 }) => 
     const [isMove, setIsMove] = useState(false);
     const [auto, setAuto] = useState(automatic)
 
-    let coordinatesActiveSlide = currentSlide * (-100)
-    let moveDeviation = isMove ? touchEnd - touchStart : 0
+    const coordinatesActiveSlide = currentSlide * (-100)
+    const moveDeviation = isMove ? touchEnd - touchStart : 0
     const timerRef = useRef(null)
 
 
