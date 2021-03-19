@@ -1,7 +1,7 @@
 # carousel
 </br>
 
-##  [Demo](https://sharp-lamarr-471dfc.netlify.app/)
+##  [Demo](https://infallible-lalande-1f0d03.netlify.app/)
 </br>
 
 ## Development
